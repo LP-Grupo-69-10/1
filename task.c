@@ -3,7 +3,7 @@
 #include "task.h"
 
 task *new_task() {
-  return (task*)malloc(sizeof(task));;
+  return (task*)malloc(sizeof(task));
 }
 
 void set_id(task *t, unsigned short i) {
