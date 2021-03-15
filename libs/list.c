@@ -47,7 +47,7 @@ void search_id(list l, unsigned short key, list *prev, list *cur) {
 
 void remove_task(list l, task *t) {
   list prev,to_remove;
-  search_id(l,t->id,&prev,&to_remove);
+  search_id(l, t->id, &prev, &to_remove);
   prev->next = to_remove->next;
   free(to_remove);
 }
@@ -71,19 +71,15 @@ list person_list(list l, char *person) {
 
 void print_list(list l, byte b) {
   while((l = l->next) != NULL) {
-    for(byte i = 0; i < 7; i++) {
-      if(b >> i) {
-        switch (i) {
-          case 0: printf("%hu\n", l->data->id); break;
-          case 1: printf("%hhd\n", l->data->priority); break;
-          case 2: printf("time\n"); break;
-          case 3: printf("%s\n", l->data->description); break;
-          case 4: printf("%s\n", l->data->person); break;
-          case 5: printf("time max\n"); break;
-          case 6: printf("time cls\n"); break;
-        }
-      }
-    }
+
+    if(b &  1) printf("%hu\n", l->data->id);
+    if(b &  2) printf("%hhd\n", l->data->priority);
+    if(b &  4) printf("time\n");
+    if(b &  8) printf("%s\n", l->data->description);
+    if(b & 16) printf("%s\n", l->data->person);
+    if(b & 32) printf("time max\n");
+    if(b & 64) printf("time cls\n");
+    
     printf("\n");
   }
 }
