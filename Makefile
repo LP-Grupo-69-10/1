@@ -1,3 +1,3 @@
 test:
-	gcc -Wall libs/* test.c -o .test
+	gcc -Wall libs/*.c test.c -o .test
 	./.test
