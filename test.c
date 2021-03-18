@@ -2,9 +2,9 @@
 #include <time.h>
 #include <stdlib.h>
 #include <string.h>
-#include "libs/list.h"
+#include "libs/file.h"
 
-int main() {
+void testar1() {
   list l = new_list();
   time_t timer = time(NULL);
   
@@ -25,11 +25,23 @@ int main() {
 
     insert(l,t);
   }
-
-  // edit_person(l, 2, "michaela");  
-  // list lp = person_list(l, "michaela");
-
+  
   print_list(l, 127);
+  
+  write_lf(l, "testfile");
+  list nl = read_fl("testfile");
+  puts("--- --- --- ---");
+  print_list(nl, 127);
+  
+}
 
+void testar2() {
+  list l = read_fl("testfile");
+  print_list(l, 127);
+}
+
+int main() {
+  testar2();
+  
   return 0;
 }
