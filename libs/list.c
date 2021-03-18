@@ -5,7 +5,21 @@
 #include "list.h"
 
 list new_list() {
-  return (list)malloc(sizeof(node));
+  list l = (node*)malloc(sizeof(node));
+  l->data = NULL;
+  l->next = NULL;
+  return l;
+}
+
+void add_first(list l, task *t) {
+  list to_add = (list)malloc(sizeof(node));
+  list post = l->next;
+
+  if(to_add != NULL) {
+    to_add->data = t;
+    l->next = to_add;
+    to_add->next = post;
+  }
 }
 
 void search_priority(list l, byte key, list *prev, list *cur) {
