@@ -24,7 +24,7 @@ list read_fl(char *filename) {
     // read task and comeback to beggining of task
     (void)fread(t, sizeof(task), 1, fp);
     fseek(fp, -sizeof(task), SEEK_CUR);
-
+    
     add_first(l, t);
   }
 

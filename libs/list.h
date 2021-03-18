@@ -1,3 +1,6 @@
+#ifndef LIST_H
+#define LIST_H
+
 #include "task.h"
 
 typedef struct node_ *list;
@@ -20,3 +23,5 @@ void edit_person(list, unsigned short, char*);
 list person_list(list, char*);
 
 void print_list(list, byte);
+
+#endif /* LIST_H */

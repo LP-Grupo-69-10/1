@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "list.h"
+#include "task.h"
 
 list new_list() {
   list l = (node*)malloc(sizeof(node));

@@ -8,10 +8,10 @@ task *new_task() {
   t->id = 0;
   t->priority = 0;
   t->creation = time(NULL);
-  t->description = (char*)malloc(50*sizeof(char));
-  t->person = (char*)malloc(50*sizeof(char));
-  t->deadline = (time_t)0; // (time_t*)malloc(sizeof(time_t));
-  t->conclusion = (time_t)0; // (time_t*)malloc(sizeof(time_t));
+  t->description[0] = 0;
+  t->person[0] = 0;
+  t->deadline = (time_t)0;
+  t->conclusion = (time_t)0;
     
   return t;
 }
