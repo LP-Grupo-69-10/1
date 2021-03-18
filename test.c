@@ -2,6 +2,8 @@
 #include <time.h>
 #include <stdlib.h>
 #include <string.h>
+#include "libs/list.h"
+#include "libs/task.h"
 #include "libs/file.h"
 
 void testar1() {
@@ -22,13 +24,14 @@ void testar1() {
     set_priority(t, a);
     set_description(t, "lavar loiça");
     set_person(t, "michael");
-
+    
     insert(l,t);
   }
   
   print_list(l, 127);
   
   write_lf(l, "testfile");
+
   list nl = read_fl("testfile");
   puts("--- --- --- ---");
   print_list(nl, 127);
@@ -41,7 +44,7 @@ void testar2() {
 }
 
 int main() {
-  testar2();
+  testar1();
   
   return 0;
 }
