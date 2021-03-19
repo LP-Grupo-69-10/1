@@ -54,6 +54,7 @@ void read_safe_string(char *a) {
     fgets(buf, 60, stdin);
     strcpy(a, buf);
   }
+  free(buf);
 }
 
 void read_date(time_t *a) {
