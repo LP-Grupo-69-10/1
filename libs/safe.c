@@ -57,14 +57,14 @@ void read_safe_string(char *a) {
 }
 
 void read_date(time_t *a) {
-  byte min, hour, day, month, year;
+  int min, hour, day, month, year;
 
   do {
-    read_safe_byte(&min);
-    read_safe_byte(&hour);
-    read_safe_byte(&day);
-    read_safe_byte(&month);
-    read_safe_byte(&year);
+    read_safe_int(&min);
+    read_safe_int(&hour);
+    read_safe_int(&day);
+    read_safe_int(&month);
+    read_safe_int(&year);
     // mudar estrutura;
   } while(1/* not null a*/);
 }
