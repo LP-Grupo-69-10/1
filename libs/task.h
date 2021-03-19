@@ -3,6 +3,8 @@
 
 #include <time.h>
 
+extern unsigned short ID_COUNT;
+
 typedef char byte;
 
 typedef struct {
@@ -17,10 +19,11 @@ typedef struct {
 
 task *new_task();
 
+// Manage ID
+void load_id(char*);
+
 // Setters
-void set_id(task*, unsigned short);
 void set_priority(task*, byte);
-void set_creation(task*, time_t);
 void set_description(task*, char*);
 void set_person(task*, char*);
 void set_deadline(task*, time_t);
