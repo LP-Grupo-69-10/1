@@ -7,7 +7,7 @@
 void write_lf(list l, char *filename) {  
   FILE *fp = fopen(filename,"wb");
   
-  if(strcmp(filename, "to_do") == 0) // file saving ID_COUNT
+  if(strcmp(filename, "to_do") == 0)
     (void)fwrite(&ID_COUNT, sizeof(unsigned short), 1, fp);
   
   if(fp != NULL)

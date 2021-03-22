@@ -52,10 +52,10 @@ void read_safe_string(char *a, char *msg) {
   
   if(buf == NULL) printf("Sem memória disponível. Devias começar a trabalhar!");
   else {
-    printf("%s", msg);
     fgets(buf, 60, stdin);
     strcpy(a, buf);
   }
+  
   free(buf);
 }
 

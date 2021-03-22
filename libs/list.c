@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
@@ -62,7 +63,7 @@ void search_id(list l, unsigned short key, list *prev, list *cur) {
 }
 
 void remove_task(list l, task *t) {
-  list prev,to_remove;
+  list prev, to_remove;
   search_id(l, t->id, &prev, &to_remove);
   prev->next = to_remove->next;
   free(to_remove);
@@ -72,7 +73,6 @@ void edit_person(list l, unsigned short key, char *person) {
   list _, cur;
   search_id(l, key, &_, &cur);
   strcpy(cur->data->person, person);
-
 }
 
 list person_list(list l, char *person) {
