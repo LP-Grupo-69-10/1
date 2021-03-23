@@ -61,9 +61,9 @@ void search_id(list l, unsigned short key, list *prev, list *cur) {
     *cur = NULL;
 }
 
-void remove_task(list l, task *t) {
+void remove_task(list l, unsigned short key) {
   list prev, to_remove;
-  search_id(l, t->id, &prev, &to_remove);
+  search_id(l, key, &prev, &to_remove);
   prev->next = to_remove->next;
   free(to_remove);
 }
