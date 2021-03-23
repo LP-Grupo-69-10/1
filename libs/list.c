@@ -100,3 +100,15 @@ void print_list(list l, byte b) {
     putchar('\n');
   }
 }
+
+task* find_task(list l, unsigned short key) {
+  list run = l->next;
+
+  while(run != NULL) {
+    if(run->data->id == key)
+      return run->data;
+    run = run->next;
+  }
+
+  return NULL;
+}

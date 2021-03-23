@@ -24,4 +24,6 @@ list person_list(list, char*);
 
 void print_list(list, byte);
 
+task* find_task(list, unsigned short);
+
 #endif /* LIST_H */
