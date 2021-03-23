@@ -114,21 +114,3 @@ void person_list1() {//Miguel
 void print_by_creation() { //Miguel
   
 }
-
-/*     case 2: //mover cartões */
-/*       break; */
-/*     case 3: //alterar pessoa responsável */
-/*       //edit_person(); */
-/*       break; */
-/*     case 4: //fechar tarefa */
-/*       break; */
-/*     case 5: //reabrir tarefa */
-/*       break; */
-/*     case 6: //visualizar quadro */
-/*       break; */
-/*     case 8: //visualizar tarefas ordenadas por ordem de data de criação */
-/*       break; */
-/*     case 0: //termina */
-/*       break; */
-/*   } */
-/* } */
