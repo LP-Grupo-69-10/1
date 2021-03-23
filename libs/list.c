@@ -1,7 +1,9 @@
+
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include "list.h"
 #include "task.h"
 
@@ -62,7 +64,7 @@ void search_id(list l, unsigned short key, list *prev, list *cur) {
 }
 
 void remove_task(list l, task *t) {
-  list prev,to_remove;
+  list prev, to_remove;
   search_id(l, t->id, &prev, &to_remove);
   prev->next = to_remove->next;
   free(to_remove);
@@ -72,7 +74,6 @@ void edit_person(list l, unsigned short key, char *person) {
   list _, cur;
   search_id(l, key, &_, &cur);
   strcpy(cur->data->person, person);
-
 }
 
 list person_list(list l, char *person) {
@@ -84,6 +85,7 @@ list person_list(list l, char *person) {
   }
   return r;
 }
+
 
 void print_list(list l, byte b) {
   while((l = l->next) != NULL) {
@@ -97,7 +99,14 @@ void print_list(list l, byte b) {
       printf("prazo a %s", ctime(&l->data->deadline));
     if((b & 64) && l->data->conclusion != 0)
       printf("concluido a %s", ctime(&l->data->conclusion));
-    
+
     putchar('\n');
   }
+}
+
+task *find_task(list l, unsigned short id) {
+  list _, cur;
+  search_id(l, id, &_, &cur);
+
+  return cur->data;
 }

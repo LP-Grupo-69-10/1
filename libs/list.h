@@ -1,6 +1,7 @@
 #ifndef LIST_H
 #define LIST_H
 
+#include <stdbool.h>
 #include "task.h"
 
 typedef struct node_ *list;
@@ -21,6 +22,8 @@ void remove_task(list, task*);
 
 void edit_person(list, unsigned short, char*);
 list person_list(list, char*);
+
+task *find_task(list, unsigned short);
 
 void print_list(list, byte);
 
