@@ -30,23 +30,6 @@ void read_safe_int(int* a, char* msg) {
   *a = t;
 }
 
-void read_safe_byte(byte *a, char* msg) {
-  int t;
-  read_safe_num(&t, msg);
-  *a = (byte)t;
-  if((int)*a != t) {
-    wrong_input();
-    read_safe_byte(a, msg);
-  }
-}
-
-void read_safe_ushort(unsigned short *a, char *msg) {
-  int t;
-  read_safe_num(&t, msg);
-  *a = (unsigned short)t;
-  if((int)*a != t) read_safe_ushort(a, msg);
-}
-
 void read_safe_string(char *a, char *msg) {
   if(a == NULL)
     printf("Sem memória disponível. Devias começar a trabalhar!");
@@ -79,24 +62,24 @@ void read_safe_date(time_t *a, char *msg) {
 
 // ------------------------------------------------------------------- //
 
-void read_option(byte *a) {
-  read_safe_byte(a, "\nInsira uma opção: ");
+void read_option(int *a) {
+  read_safe_int(a, "\nInsira uma opção: ");
   if(*a > 9) {
     wrong_input();
     read_option(a);
   }
 }
 
-void read_id(unsigned short *a) {
-  read_safe_ushort(a, "\nInsira o ID da tarefa: ");
-  if(1/*ID DOESNT EXIT*/) {
+void read_id(int *a) {
+  read_safe_int(a, "\nInsira o ID da tarefa: ");
+  if(0/*ID DOESNT EXIT*/) {
     wrong_input();
     read_id(a);
   }
 }
 
-void read_priority(byte *a) {
-  read_safe_byte(a, "\nInsira a prioridade da tarefa (1-10): ");
+void read_priority(int *a) {
+  read_safe_int(a, "\nInsira a prioridade da tarefa (1-10): ");
   if(*a == 0 || *a > 10) {
     wrong_input();
     read_priority(a);

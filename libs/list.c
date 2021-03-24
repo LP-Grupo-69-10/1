@@ -23,7 +23,7 @@ void add_first(list l, task *t) {
   }
 }
 
-void search_priority(list l, byte key, list *prev, list *cur) {
+void search_priority(list l, int key, list *prev, list *cur) {
   *prev = l;
   *cur = l->next;
 
@@ -48,7 +48,7 @@ void insert(list l, task *t) {
   }
 }
 
-void search_id(list l, unsigned short key, list *prev, list *cur) {
+void search_id(list l, int key, list *prev, list *cur) {
   *prev = l;
   *cur = l->next;
 
@@ -61,14 +61,14 @@ void search_id(list l, unsigned short key, list *prev, list *cur) {
     *cur = NULL;
 }
 
-void remove_task(list l, unsigned short key) {
+void remove_task(list l, int key) {
   list prev, to_remove;
   search_id(l, key, &prev, &to_remove);
   prev->next = to_remove->next;
   free(to_remove);
 }
 
-void edit_person(list l, unsigned short key, char *person) {
+void edit_person(list l, int key, char *person) {
   list _, cur;
   search_id(l, key, &_, &cur);
   strcpy(cur->data->person, person);
@@ -84,7 +84,7 @@ list person_list(list l, char *person) {
   return r;
 }
 
-void print_list(list l, byte b) {
+void print_list(list l, int b) {
   while((l = l->next) != NULL) {
 
     if( b &  1) printf("id: %hu\n", l->data->id);
@@ -101,7 +101,7 @@ void print_list(list l, byte b) {
   }
 }
 
-task *find_task(list l, unsigned short key) {
+task *find_task(list l, int key) {
   list run = l->next;
 
   while(run != NULL) {

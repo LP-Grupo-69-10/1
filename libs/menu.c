@@ -49,58 +49,75 @@ void insert_new_task() {
   insert(TO_DO, t);
 }
 
-void start_task() { //Sofia
-  unsigned short id;
+void start_task() {
+  int id;
   read_id(&id);
 
-  //it task is in TO-DO
-  char *person = malloc(60 * sizeof(char));
-  read_person(person);
+  task *to_start = find_task(TO_DO, id);
+  if(to_start != NULL) {
   
-  //read deadline
-  task *found1 = find_task(TO_DO, id);
-  set_person(found1, person);
-  
-  //set_deadline
-  insert(DOING, found1);
-  remove_task(TO_DO, id);
-
-  //if task is in DOING
-  task *found2 = find_task(DOING, id);
-  insert(TO_DO, found2);
-  remove_task(DOING, id);
+    while(to_start->person[0] == '\0') {
+      printf("Tem que especificar o responsável.");
+      read_person(to_start->person);
+    }
+    
+    /*
+      time_t deadline;
+      read_deadline(&deadline);
+    */
+    
+    remove_task(TO_DO, id);
+    insert(DOING, to_start);
+  }
+  else {
+    to_start = find_task(DOING, id);
+    if(to_start == NULL) {
+      printf("Tarefa não encontrada.\n");
+      return;
+    }
+    
+    remove_task(DOING, id);
+    insert(TO_DO, to_start);
+  }
 }
 
-void change_responsible() { //Sofia
-  unsigned short id;
+void change_responsible() {
+  int id;
   read_id(&id);
+
   
   char *person = malloc(60 * sizeof(char));
   read_person(person);
-  //check in which list task exists
-  edit_person(TO_DO, id, person);
-  edit_person(DOING, id, person);
-  edit_person(DONE, id, person);
+
+  if(find_task(TO_DO, id) != NULL) edit_person(TO_DO, id, person);
+  else if(find_task(DOING, id) != NULL) edit_person(DOING, id, person);
+  else if(find_task(DONE, id) != NULL) edit_person(DONE, id, person);
+  else printf("Tarefa não encontrada.\n");
 }
 
-void end_task() { //Gui
-  unsigned short id;
+void end_task() {
+  int id;
   read_id(&id);
-  
+
   task *to_add = find_task(DOING, id);
+  if(to_add == NULL) {
+      printf("Tarefa não encontrada.\n");
+      return;
+    }
+
+  to_add->conclusion = time(NULL);
   remove_task(DOING, id);
-  to_add->conclusion = 0; /* TIME NOW */
   insert(DONE, to_add);
 }
 
-void redo_task() { //Gui
-  unsigned short id;
+void redo_task() {
+  int id;
   read_id(&id);
   
   task *to_add = find_task(DONE, id);
   remove_task(DONE, id);
-
-  to_add->creation = 0; /* TIME NOW */
+  
+  to_add->creation = time(NULL);
   to_add->conclusion = 0; 
   
   insert(TO_DO, to_add);
@@ -121,7 +138,7 @@ void print_board() {
     
     if(run1 != NULL) run1 = run1->next;
     if(run2 != NULL) run2 = run2->next;
-    if(run2 != NULL) run2 = run2->next;
+    if(run3 != NULL) run3 = run3->next;
   }
 
   printf("+-----------------------------------+-----------------------------------+-----------------------------------+\n");

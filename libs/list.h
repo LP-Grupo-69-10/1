@@ -13,17 +13,17 @@ typedef struct node_ {
 list new_list();
 void add_first(list, task*);
 
-void search_priority(list, byte, list*, list*); // based on priority (order)
+void search_priority(list, int, list*, list*); // based on priority (order)
 void insert(list, task*);
 
-void search_id(list, unsigned short, list*, list*); // based on id (no order)
-void remove_task(list, unsigned short);
+void search_id(list, int, list*, list*); // based on id (no order)
+void remove_task(list, int);
 
-void edit_person(list, unsigned short, char*);
+void edit_person(list, int, char*);
 list person_list(list, char*);
 
-void print_list(list, byte);
+void print_list(list, int);
 
-task* find_task(list, unsigned short);
+task* find_task(list, int);
 
 #endif /* LIST_H */

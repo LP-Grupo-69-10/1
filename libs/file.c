@@ -4,14 +4,14 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define ID_SIZE sizeof(unsigned short)
+#define ID_SIZE sizeof(int) 
 
 void write_lf(list l, char *filename) {  
   FILE *fp = fopen(filename,"wb");
     
   if(fp != NULL) {
     while((l = l->next) != NULL) 
-      fwrite(l->data + ID_SIZE, sizeof(task) - ID_SIZE, 1, fp);
+      fwrite(&l->data->priority, sizeof(task) - 4, 1, fp);
   }
 
   fclose(fp);
@@ -24,16 +24,17 @@ list read_fl(char *filename) {
   if(fp == NULL) return l;
   
   fseek(fp, 0L, SEEK_END);
-  while(fseek(fp, -sizeof(task) + ID_SIZE, SEEK_CUR) != -1) {
+  while(fseek(fp, -sizeof(task) + 4, SEEK_CUR) != -1) {
     task *t = new_task();
     
     // read task and comeback to beggining of task
-    fread(t + ID_SIZE, sizeof(task) - ID_SIZE, 1, fp);
-    fseek(fp, -sizeof(task) + ID_SIZE, SEEK_CUR);
+    fread(&t->priority, sizeof(task) - 4, 1, fp);
+    fseek(fp, -sizeof(task) + 4, SEEK_CUR);
     
     add_first(l, t);
   }
-  
   fclose(fp);
+  printf("que se fonix\n");
+  
   return l;
 }

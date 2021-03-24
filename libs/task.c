@@ -5,7 +5,7 @@
 #include "list.h"
 #include "task.h"
 
-unsigned short ID_COUNT = 1;
+int ID_COUNT = 1;
 
 task *new_task() {
   task *t = (task*)malloc(sizeof(task));
@@ -20,7 +20,7 @@ task *new_task() {
   return t;
 }
 
-void set_priority(task *t, byte p) {
+void set_priority(task *t, int p) {
   t->priority = p;
 }
 
