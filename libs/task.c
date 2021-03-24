@@ -20,15 +20,6 @@ task *new_task() {
   return t;
 }
 
-void load_id(char *filename) {
-  FILE *fp = fopen(filename, "rb");
-
-  if(fp != NULL)
-    (void)fread(&ID_COUNT, sizeof(unsigned short), 1, fp);
-
-  fclose(fp);
-}
-
 void set_priority(task *t, byte p) {
   t->priority = p;
 }
@@ -47,4 +38,16 @@ void set_deadline(task *t, time_t d) {
 
 void set_conclusion(task *t, time_t d) {
   t->conclusion = d;
+}
+
+char* print_task(task *t) {
+  if(t == NULL) return "                                   ";
+  
+  char *s = malloc(100 * sizeof(char));
+  char *temp = malloc(10 * sizeof(char));
+  sprintf(temp, "%d", t->id);
+
+  sprintf(s, "(#%s): %s, %s                              ", temp, t->person, t->description);
+  
+  return s;
 }

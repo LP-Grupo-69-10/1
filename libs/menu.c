@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "list.h"
+#include "task.h"
 #include "file.h"
 #include "menu.h"
 #include "safe.h"
@@ -16,90 +17,130 @@ void load_lists() {
   DONE  = read_fl("files/done");
 }
 
-void print_menu() {
-  printf("\n----------------------------------------------------\n");
-  printf("MENU:\n\n");
-  printf("1 - Inserir nova tarefa\n");
-  printf("2 - Mover cartões\n");
-  printf("3 - Alterar a pessoa responsável\n");
-  printf("4 - Fechar tarefa\n");
-  printf("5 - Reabrir tarefa\n");
-  printf("6 - Visualizar o quadro\n");
-  printf("7 - Visualizar as tarefas de uma pessoa\n");
-  printf("8 - Visualizar tarefas ordenadas por data de criação\n");
-  printf("0 - Terminar\n");
-  printf("----------------------------------------------------\n");
+void write_lists() {
+  write_lf(TO_DO, "files/to_do");
+  write_lf(DOING, "files/doing");
+  write_lf(DONE,  "files/done");
+}
 
-  printf("\n-> ");
+void print_menu() {
+  printf("\n+----------------------------------------------------+\n");
+  printf("|MENU:                                               |\n");
+  printf("|                                                    |\n");
+  printf("|1 - Inserir nova tarefa                             |\n");
+  printf("|2 - Mover cartões                                   |\n");
+  printf("|3 - Alterar a pessoa responsável                    |\n");
+  printf("|4 - Fechar tarefa                                   |\n");
+  printf("|5 - Reabrir tarefa                                  |\n");
+  printf("|6 - Visualizar o quadro                             |\n");
+  printf("|7 - Visualizar as tarefas de uma pessoa             |\n");
+  printf("|8 - Visualizar tarefas ordenadas por data de criação|\n");
+  printf("|0 - Terminar                                        |\n");
+  printf("+----------------------------------------------------+\n");
 }
 
 void insert_new_task() {
   task *t = new_task();
   
-  byte priority;
-  read_priority(&priority);
-  set_priority(t, priority);
-  
-  char* description = malloc(60 * sizeof(char));
-  read_description(description);
-  set_description(t, description);
-
-  char* person = malloc(60 * sizeof(char));
-  read_person(person);
-  set_person(t, person);
-
-  /*
-    DATAS
-   */
+  read_priority(&t->priority);  
+  read_description(t->description);
+  read_person(t->person);
   
   insert(TO_DO, t);
 }
 
 void start_task() { //Sofia
+  unsigned short id;
+  read_id(&id);
+
+  //it task is in TO-DO
+  char *person = malloc(60 * sizeof(char));
+  read_person(person);
   
+  //read deadline
+  task *found1 = find_task(TO_DO, id);
+  set_person(found1, person);
+  
+  //set_deadline
+  insert(DOING, found1);
+  remove_task(TO_DO, id);
+
+  //if task is in DOING
+  task *found2 = find_task(DOING, id);
+  insert(TO_DO, found2);
+  remove_task(DOING, id);
 }
 
 void change_responsible() { //Sofia
+  unsigned short id;
+  read_id(&id);
   
+  char *person = malloc(60 * sizeof(char));
+  read_person(person);
+  //check in which list task exists
+  edit_person(TO_DO, id, person);
+  edit_person(DOING, id, person);
+  edit_person(DONE, id, person);
 }
 
 void end_task() { //Gui
+  unsigned short id;
+  read_id(&id);
   
+  task *to_add = find_task(DOING, id);
+  remove_task(DOING, id);
+  to_add->conclusion = 0; /* TIME NOW */
+  insert(DONE, to_add);
 }
 
 void redo_task() { //Gui
+  unsigned short id;
+  read_id(&id);
   
+  task *to_add = find_task(DONE, id);
+  remove_task(DONE, id);
+
+  to_add->creation = 0; /* TIME NOW */
+  to_add->conclusion = 0; 
+  
+  insert(TO_DO, to_add);
 }
 
-void print_board() { //Gui
+void print_board() {
+  list run1 = TO_DO->next, run2 = DOING->next, run3 = DONE->next;
+  printf("+-----------------------------------+-----------------------------------+-----------------------------------+\n");
+  printf("|               TO DO               |               DOING               |                DONE               |\n");
+  printf("+-----------------------------------+-----------------------------------+-----------------------------------+\n");
   
+  for(int i = 0; i < 8; i++) {
+    char *s1 = print_task((run1 != NULL ? run1->data : NULL));
+    char *s2 = print_task((run2 != NULL ? run2->data : NULL));
+    char *s3 = print_task((run3 != NULL ? run3->data : NULL));
+    
+    printf("|%.35s|%.35s|%.35s|\n", s1, s2, s3);
+    
+    if(run1 != NULL) run1 = run1->next;
+    if(run2 != NULL) run2 = run2->next;
+    if(run2 != NULL) run2 = run2->next;
+  }
+
+  printf("+-----------------------------------+-----------------------------------+-----------------------------------+\n");
+  printf("- (#n): ID da tarefa\n");
 }
 
-void person_list1() {//Miguel
+void print_by_person() {
+  list l;    
   char *s = malloc(60 * sizeof(char));
   read_person(s);
-  list lp = person_list(TO_DO, s); // e as outras duas
-  print_list(lp, 127);
+  
+  l = person_list(TO_DO, s);
+  print_list(l,127);
+  l = person_list(DOING, s);
+  print_list(l,127);
+  l = person_list(DONE,  s);
+  print_list(l,127);
 }
 
-void print_by_creation() { //Miguel
+void print_by_creation() {
   
 }
-
-/*     case 2: //mover cartões */
-/*       break; */
-/*     case 3: //alterar pessoa responsável */
-/*       //edit_person(); */
-/*       break; */
-/*     case 4: //fechar tarefa */
-/*       break; */
-/*     case 5: //reabrir tarefa */
-/*       break; */
-/*     case 6: //visualizar quadro */
-/*       break; */
-/*     case 8: //visualizar tarefas ordenadas por ordem de data de criação */
-/*       break; */
-/*     case 0: //termina */
-/*       break; */
-/*   } */
-/* } */

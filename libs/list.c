@@ -101,7 +101,7 @@ void print_list(list l, byte b) {
   }
 }
 
-task* find_task(list l, unsigned short key) {
+task *find_task(list l, unsigned short key) {
   list run = l->next;
 
   while(run != NULL) {

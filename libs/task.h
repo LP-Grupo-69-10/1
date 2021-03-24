@@ -19,14 +19,12 @@ typedef struct {
 
 task *new_task();
 
-// Manage ID
-void load_id(char*);
-
-// Setters
 void set_priority(task*, byte);
 void set_description(task*, char*);
 void set_person(task*, char*);
 void set_deadline(task*, time_t);
 void set_conclusion(task*, time_t);
+
+char *print_task(task*);
 
 #endif /* TASK_H */

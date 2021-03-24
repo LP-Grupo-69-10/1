@@ -15,7 +15,7 @@ void read_safe_num(int *a, char* msg) {
   *a = atoi(buf);
   sprintf(t_buf, "%d", *a);
   
-  if(strcmp(t_buf, buf) != 0) { 
+  if(*a < 0 || strcmp(t_buf, buf) != 0) { 
     wrong_input();
     read_safe_num(a, msg);
   }
@@ -48,39 +48,40 @@ void read_safe_ushort(unsigned short *a, char *msg) {
 }
 
 void read_safe_string(char *a, char *msg) {
-  char *buf = malloc(60 * sizeof(char));
-  
-  if(buf == NULL) printf("Sem memória disponível. Devias começar a trabalhar!");
+  if(a == NULL)
+    printf("Sem memória disponível. Devias começar a trabalhar!");
   else {
-    fgets(buf, 60, stdin);
-    strcpy(a, buf);
+    printf("%s", msg);
+    fgets(a, 60, stdin);
+    if(a[strlen(a) - 1] == '\n') a[strlen(a) - 1] = '\0';
   }
-  
-  free(buf);
 }
 
 void read_safe_date(time_t *a, char *msg) {
   printf("%s", msg);
-  int min, hour, day, month, year;
+  struct tm *date = (struct tm*)malloc(sizeof(struct tm));
   
-  read_safe_int(&year,  "Insira o ano: ");
-  read_safe_int(&month, "Insira o mês: ");
-  read_safe_int(&day,   "Insira o dia: ");
-  read_safe_int(&hour,  "Insira a hora: ");
-  read_safe_int(&min,   "Insira o minuto: ");
-  // mudar estrutura;
+  read_safe_int(&date->tm_year, "Insira o ano: ");
+  read_safe_int(&date->tm_mon,  "Insira o mês: ");
+  read_safe_int(&date->tm_mday, "Insira o dia: ");
+  read_safe_int(&date->tm_hour, "Insira a hora: ");
+  read_safe_int(&date->tm_min , "Insira o minuto: ");
+  date->tm_year -= 1900; date->tm_mon--;
   
-  if(1/*NOT NULL a*/) {
+  *a = mktime(date);
+  free(date);
+ 
+  if(*a == -1) {
     wrong_input();
     read_safe_date(a, msg);
   }
 }
 
-// -------------------------------------------------------------------------------- //
+// ------------------------------------------------------------------- //
 
 void read_option(byte *a) {
   read_safe_byte(a, "\nInsira uma opção: ");
-  if(*a == 0 || *a > 10) {
+  if(*a > 9) {
     wrong_input();
     read_option(a);
   }
@@ -95,23 +96,23 @@ void read_id(unsigned short *a) {
 }
 
 void read_priority(byte *a) {
-  read_safe_byte(a, "Insira a prioridade da tarefa (1-10): ");
-  if(*a > 10) {
+  read_safe_byte(a, "\nInsira a prioridade da tarefa (1-10): ");
+  if(*a == 0 || *a > 10) {
     wrong_input();
     read_priority(a);
   }
 }
 
 void read_description(char *a) {
-  read_safe_string(a, "Insira a descrição desta tarefa: ");
+  read_safe_string(a, "\nInsira a descrição desta tarefa: ");
 }
 
 void read_person(char *a) {
-  read_safe_string(a, "Insira o nome do responsável por esta tarefa: ");
+  read_safe_string(a, "\nInsira o nome do responsável por esta tarefa: ");
 }
 
 void read_deadline(time_t *a) {
-  read_safe_date(a, "Insira a data limite para a conclusão da tarefa:\n");
+  read_safe_date(a, "\nInsira a data limite para a conclusão da tarefa:\n");
 }
 
 void wrong_input() {
