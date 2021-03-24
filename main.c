@@ -16,7 +16,7 @@ int main() {
   load_lists();
   
   int exit_status = 0;
-  byte option;
+  int option;
   
   while(!exit_status) {
     print_menu();
