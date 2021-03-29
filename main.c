@@ -1,3 +1,9 @@
+// ----------------------------------------------------
+// DCC - LP - Quadro de Kanban
+// ----------------------------------------------------
+// Ana Sofia Teixeira - Guilherme Duarte - Miguel Alves
+// ----------------------------------------------------
+
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
