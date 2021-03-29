@@ -44,7 +44,7 @@ void search_priority(list l, int key, list *prev, list *cur) {
   }
 }
 
-void insert(list l, task *t) {
+void insert_priority(list l, task *t) {
   list to_add = (list)malloc(sizeof(node));
   list prev,_;
 
@@ -88,8 +88,44 @@ list person_list(list l, char *person) {
   list ans = new_list();
   while((l = l->next) != NULL) {
     if(strcmp(l->data->person, person) == 0) {
-      insert(ans, l->data);
+      insert_priority(ans, l->data);
     }
+  }
+  
+  return ans;
+}
+
+void search_creation(list l, time_t key, list *prev, list *cur) {
+  *prev = l;
+  *cur = l->next;
+
+  while(*cur != NULL && (*cur)->data->creation < key) {
+    *prev = *cur;
+    *cur = (*cur)->next;
+  }
+
+  if(*cur != NULL && (*cur)->data->creation != key) {
+    *cur = NULL;
+  }
+}
+
+void insert_creation(list l, task *t) {
+  list to_add = (list)malloc(sizeof(node));
+  list prev,_;
+
+  if(to_add != NULL) {
+    to_add->data = t;
+    search_creation(l, t->creation, &prev, &_);
+    to_add->next = prev->next;
+    prev->next = to_add;
+  }
+}
+
+list creation_list(list l) {
+  list ans = new_list();
+  
+  while((l = l->next) != NULL) {
+    insert_creation(ans, l->data);
   }
   
   return ans;
@@ -100,7 +136,6 @@ task *find_task(list l, int key) {
     if(l->data->id == key) {
       return l->data;
     }
-    l = l->next;
   }
 
   return NULL;

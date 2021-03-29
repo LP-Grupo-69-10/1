@@ -16,7 +16,7 @@ void read_safe_num(int *a, char* msg) {
   char *buf = malloc(100 * sizeof(char));
   char *t_buf = malloc(100 * sizeof(char));
   
-  fgets(buf, 60, stdin);
+  fgets(buf, 100, stdin);
   *(buf+strlen(buf)-1) = '\0';
   
   *a = atoi(buf);
@@ -81,7 +81,7 @@ void read_option(int *a) {
 
 void read_id(int *a) {
   read_safe_int(a, "\nInsira o ID da tarefa: ");
-  if(*a >= ID_COUNT) {
+  if(*a < 1000 || *a >= ID_COUNT) {
     wrong_input();
     read_id(a);
   }

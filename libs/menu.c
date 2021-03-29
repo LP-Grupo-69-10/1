@@ -30,19 +30,21 @@ void write_lists() {
 }
 
 void print_menu() {
-  printf("\n+----------------------------------------------------+\n");
-  printf("|MENU:                                               |\n");
-  printf("|                                                    |\n");
-  printf("|1 - Inserir nova tarefa                             |\n");
-  printf("|2 - Mover cartões                                   |\n");
-  printf("|3 - Alterar a pessoa responsável                    |\n");
-  printf("|4 - Fechar tarefa                                   |\n");
-  printf("|5 - Reabrir tarefa                                  |\n");
-  printf("|6 - Visualizar o quadro                             |\n");
-  printf("|7 - Visualizar as tarefas de uma pessoa             |\n");
-  printf("|8 - Visualizar tarefas ordenadas por data de criação|\n");
-  printf("|0 - Terminar                                        |\n");
-  printf("+----------------------------------------------------+\n");
+  printf("\n+------------------------------------------------------+\n");
+  printf("| MENU:                                                |\n");
+  printf("+------------------------------------------------------+\n");
+  printf("|                                                      |\n");
+  printf("| 1 - Inserir nova tarefa                              |\n");
+  printf("| 2 - Mover cartões                                    |\n");
+  printf("| 3 - Alterar a pessoa responsável                     |\n");
+  printf("| 4 - Fechar tarefa                                    |\n");
+  printf("| 5 - Reabrir tarefa                                   |\n");
+  printf("| 6 - Visualizar o quadro                              |\n");
+  printf("| 7 - Visualizar as tarefas de uma pessoa              |\n");
+  printf("| 8 - Visualizar tarefas ordenadas por data de criação |\n");
+  printf("| 0 - Terminar                                         |\n");
+  printf("|                                                      |\n");
+  printf("+------------------------------------------------------+\n");
 }
 
 void insert_new_task() {
@@ -52,13 +54,13 @@ void insert_new_task() {
   read_description(t->description);
   read_person(t->person);
   
-  insert(TO_DO, t);
+  insert_priority(TO_DO, t);
 }
 
 void start_task() {
-  int id;
+  int id = 1002;
   read_id(&id);
-
+  
   task *to_start = find_task(TO_DO, id);
   if(to_start != NULL) {
   
@@ -66,15 +68,16 @@ void start_task() {
       printf("Tem que especificar o responsável.");
       read_person(to_start->person);
     }
-    
+
     /*
-      time_t deadline;
-      read_deadline(&deadline);
+    time_t deadline;
+    read_deadline(&deadline);
     */
     
     remove_task(TO_DO, id);
-    insert(DOING, to_start);
+    insert_priority(DOING, to_start);
   }
+  
   else {
     to_start = find_task(DOING, id);
     if(to_start == NULL) {
@@ -83,7 +86,7 @@ void start_task() {
     }
     
     remove_task(DOING, id);
-    insert(TO_DO, to_start);
+    insert_priority(TO_DO, to_start);
   }
 }
 
@@ -91,7 +94,6 @@ void change_responsible() {
   int id;
   read_id(&id);
 
-  
   char *person = malloc(60 * sizeof(char));
   read_person(person);
 
@@ -113,7 +115,7 @@ void end_task() {
 
   to_add->conclusion = time(NULL);
   remove_task(DOING, id);
-  insert(DONE, to_add);
+  insert_priority(DONE, to_add);
 }
 
 void redo_task() {
@@ -126,7 +128,7 @@ void redo_task() {
   to_add->creation = time(NULL);
   to_add->conclusion = 0; 
   
-  insert(TO_DO, to_add);
+  insert_priority(TO_DO, to_add);
 }
 
 void print_board() {
@@ -134,13 +136,18 @@ void print_board() {
   printf("+-----------------------------------+-----------------------------------+-----------------------------------+\n");
   printf("|               TO DO               |               DOING               |                DONE               |\n");
   printf("+-----------------------------------+-----------------------------------+-----------------------------------+\n");
+
+  if(run1 == NULL && run2 == NULL && run3 == NULL) {
+    printf("|                                   |                                   |                                   |\n");
+    return;
+  }
   
-  for(int i = 0; i < 8; i++) {
+  while(run1 != NULL || run2 != NULL || run3 != NULL) {
     char *s1 = string_task((run1 != NULL ? run1->data : NULL));
     char *s2 = string_task((run2 != NULL ? run2->data : NULL));
     char *s3 = string_task((run3 != NULL ? run3->data : NULL));
     
-    printf("|%.35s|%.35s|%.35s|\n", s1, s2, s3);
+    printf("| %.33s | %.33s | %.33s |\n", s1, s2, s3);
     
     if(run1 != NULL) run1 = run1->next;
     if(run2 != NULL) run2 = run2->next;
@@ -165,5 +172,12 @@ void print_by_person() {
 }
 
 void print_by_creation() {
+  list l;
   
+  l = creation_list(TO_DO);
+  print_list(l, 127);
+  l = creation_list(DOING);
+  print_list(l, 127);
+  l = creation_list(DONE);
+  print_list(l, 127);
 }
