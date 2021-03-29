@@ -1,4 +1,4 @@
-main:
+run:
 	gcc -Wall libs/*.c main.c -o .main
 	./.main
 
