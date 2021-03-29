@@ -1,10 +1,15 @@
+// ----------------------------------------------------
+// DCC - LP - Quadro de Kanban
+// ----------------------------------------------------
+// Ana Sofia Teixeira - Guilherme Duarte - Miguel Alves
+// ----------------------------------------------------
+
 #ifndef TASK_H
 #define TASK_H
 
 #include <time.h>
 
 extern int ID_COUNT;
-
 
 typedef struct {
   int id;
@@ -18,12 +23,6 @@ typedef struct {
 
 task *new_task();
 
-void set_priority(task*, int);
-void set_description(task*, char*);
-void set_person(task*, char*);
-void set_deadline(task*, time_t);
-void set_conclusion(task*, time_t);
-
-char *print_task(task*);
+char *string_task(task*);
 
 #endif /* TASK_H */

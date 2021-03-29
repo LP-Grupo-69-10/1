@@ -1,3 +1,9 @@
+// ----------------------------------------------------
+// DCC - LP - Quadro de Kanban
+// ----------------------------------------------------
+// Ana Sofia Teixeira - Guilherme Duarte - Miguel Alves
+// ----------------------------------------------------
+
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
@@ -9,6 +15,7 @@ list new_list() {
   list l = (node*)malloc(sizeof(node));
   l->data = NULL;
   l->next = NULL;
+
   return l;
 }
 
@@ -32,8 +39,9 @@ void search_priority(list l, int key, list *prev, list *cur) {
     *cur = (*cur)->next;
   }
 
-  if(*cur != NULL && (*cur)->data->priority != key)
+  if(*cur != NULL && (*cur)->data->priority != key) {    
     *cur = NULL;
+  }
 }
 
 void insert(list l, task *t) {
@@ -57,8 +65,9 @@ void search_id(list l, int key, list *prev, list *cur) {
     *cur = (*cur)->next;
   }
 
-  if(*cur != NULL && (*cur)->data->id != key)
+  if(*cur != NULL && (*cur)->data->id != key) {
     *cur = NULL;
+  }
 }
 
 void remove_task(list l, int key) {
@@ -72,43 +81,42 @@ void edit_person(list l, int key, char *person) {
   list _, cur;
   search_id(l, key, &_, &cur);
   strcpy(cur->data->person, person);
+  free(person);
 }
 
 list person_list(list l, char *person) {
-  list r = new_list();
+  list ans = new_list();
   while((l = l->next) != NULL) {
     if(strcmp(l->data->person, person) == 0) {
-      insert(r, l->data);
+      insert(ans, l->data);
     }
   }
-  return r;
+  
+  return ans;
+}
+
+task *find_task(list l, int key) {
+  while((l = l->next) != NULL) {
+    if(l->data->id == key) {
+      return l->data;
+    }
+    l = l->next;
+  }
+
+  return NULL;
 }
 
 void print_list(list l, int b) {
   while((l = l->next) != NULL) {
 
-    if( b &  1) printf("id: %hu\n", l->data->id);
-    if( b &  2) printf("prioridade: %hhd\n", l->data->priority);
-    if( b &  4) printf("criado em %s", ctime(&l->data->creation));
-    if( b &  8) printf("descricao: %s\n", l->data->description);
-    if( b & 16) printf("responsavel: %s\n", l->data->person);
-    if((b & 32) && l->data->deadline != 0)
-      printf("prazo a %s", ctime(&l->data->deadline));
-    if((b & 64) && l->data->conclusion != 0)
-      printf("concluido a %s", ctime(&l->data->conclusion));
-    
-    putchar('\n');
+    if( b &  1)                              printf("id: %hu\n", l->data->id);
+    if( b &  2)                              printf("prioridade: %hhd\n", l->data->priority);
+    if( b &  4)                              printf("criado em %s", ctime(&l->data->creation));
+    if( b &  8)                              printf("descricao: %s\n", l->data->description);
+    if( b & 16)                              printf("responsavel: %s\n", l->data->person);
+    if((b & 32) && l->data->deadline != 0)   printf("prazo a %s", ctime(&l->data->deadline));
+    if((b & 64) && l->data->conclusion != 0) printf("concluido a %s", ctime(&l->data->conclusion));
+
+    puts("");
   }
-}
-
-task *find_task(list l, int key) {
-  list run = l->next;
-
-  while(run != NULL) {
-    if(run->data->id == key)
-      return run->data;
-    run = run->next;
-  }
-
-  return NULL;
 }

@@ -1,3 +1,9 @@
+// ----------------------------------------------------
+// DCC - LP - Quadro de Kanban
+// ----------------------------------------------------
+// Ana Sofia Teixeira - Guilherme Duarte - Miguel Alves
+// ----------------------------------------------------
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -12,15 +18,15 @@ list DOING;
 list DONE;
 
 void load_lists() {
-  TO_DO = read_fl("files/to_do");
-  DOING = read_fl("files/doing");
-  DONE  = read_fl("files/done");
+  TO_DO = read_fl(".files/to_do");
+  DOING = read_fl(".files/doing");
+  DONE  = read_fl(".files/done");
 }
 
 void write_lists() {
-  write_lf(TO_DO, "files/to_do");
-  write_lf(DOING, "files/doing");
-  write_lf(DONE,  "files/done");
+  write_lf(TO_DO, ".files/to_do");
+  write_lf(DOING, ".files/doing");
+  write_lf(DONE,  ".files/done");
 }
 
 void print_menu() {
@@ -130,9 +136,9 @@ void print_board() {
   printf("+-----------------------------------+-----------------------------------+-----------------------------------+\n");
   
   for(int i = 0; i < 8; i++) {
-    char *s1 = print_task((run1 != NULL ? run1->data : NULL));
-    char *s2 = print_task((run2 != NULL ? run2->data : NULL));
-    char *s3 = print_task((run3 != NULL ? run3->data : NULL));
+    char *s1 = string_task((run1 != NULL ? run1->data : NULL));
+    char *s2 = string_task((run2 != NULL ? run2->data : NULL));
+    char *s3 = string_task((run3 != NULL ? run3->data : NULL));
     
     printf("|%.35s|%.35s|%.35s|\n", s1, s2, s3);
     
@@ -151,11 +157,11 @@ void print_by_person() {
   read_person(s);
   
   l = person_list(TO_DO, s);
-  print_list(l,127);
+  print_list(l, 127);
   l = person_list(DOING, s);
-  print_list(l,127);
-  l = person_list(DONE,  s);
-  print_list(l,127);
+  print_list(l, 127);
+  l = person_list(DONE, s);
+  print_list(l, 127);
 }
 
 void print_by_creation() {

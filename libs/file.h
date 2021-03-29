@@ -1,3 +1,9 @@
+// ----------------------------------------------------
+// DCC - LP - Quadro de Kanban
+// ----------------------------------------------------
+// Ana Sofia Teixeira - Guilherme Duarte - Miguel Alves
+// ----------------------------------------------------
+
 #ifndef FILE_H
 #define FILE_H
 

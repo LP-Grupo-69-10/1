@@ -1,11 +1,13 @@
+// ----------------------------------------------------
+// DCC - LP - Quadro de Kanban
+// ----------------------------------------------------
+// Ana Sofia Teixeira - Guilherme Duarte - Miguel Alves
+// ----------------------------------------------------
+
 #ifndef MENU_H
 #define MENU_H
 
 #include "list.h"
-
-extern list TO_DO;
-extern list DOING;
-extern list DONE;
 
 void load_lists();
 void write_lists();

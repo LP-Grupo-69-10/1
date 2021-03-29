@@ -1,3 +1,9 @@
+// ----------------------------------------------------
+// DCC - LP - Quadro de Kanban
+// ----------------------------------------------------
+// Ana Sofia Teixeira - Guilherme Duarte - Miguel Alves
+// ----------------------------------------------------
+
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -5,7 +11,9 @@
 #include "list.h"
 #include "task.h"
 
-int ID_COUNT = 1;
+#define SPACES "                                   "
+
+int ID_COUNT = 1000;
 
 task *new_task() {
   task *t = (task*)malloc(sizeof(task));
@@ -20,34 +28,13 @@ task *new_task() {
   return t;
 }
 
-void set_priority(task *t, int p) {
-  t->priority = p;
-}
-
-void set_description(task *t, char *d) {
-  strcpy(t->description, d);
-}
-
-void set_person(task *t, char *p) {
-  strcpy(t->person, p);
-}
-
-void set_deadline(task *t, time_t d) {
-  t->deadline = d;
-}
-
-void set_conclusion(task *t, time_t d) {
-  t->conclusion = d;
-}
-
-char* print_task(task *t) {
-  if(t == NULL) return "                                   ";
+char *string_task(task *t) {
+  if(t == NULL) {
+    return SPACES;
+  }
   
   char *s = malloc(100 * sizeof(char));
-  char *temp = malloc(10 * sizeof(char));
-  sprintf(temp, "%d", t->id);
-
-  sprintf(s, "(#%s): %s, %s                              ", temp, t->person, t->description);
+  sprintf(s, "(#%d): %s, %s [%d]%s", t->id, t->person, t->description, t->priority, SPACES);
   
   return s;
 }

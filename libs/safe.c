@@ -1,7 +1,14 @@
+// ----------------------------------------------------
+// DCC - LP - Quadro de Kanban
+// ----------------------------------------------------
+// Ana Sofia Teixeira - Guilherme Duarte - Miguel Alves
+// ----------------------------------------------------
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include "safe.h"
+#include "task.h"
 
 void read_safe_num(int *a, char* msg) {
   printf("%s", msg);
@@ -31,12 +38,16 @@ void read_safe_int(int* a, char* msg) {
 }
 
 void read_safe_string(char *a, char *msg) {
-  if(a == NULL)
+  if(a == NULL) {
     printf("Sem memória disponível. Devias começar a trabalhar!");
+  }
   else {
     printf("%s", msg);
     fgets(a, 60, stdin);
-    if(a[strlen(a) - 1] == '\n') a[strlen(a) - 1] = '\0';
+
+    if(a[strlen(a) - 1] == '\n') {
+      a[strlen(a) - 1] = '\0';
+    }
   }
 }
 
@@ -60,8 +71,6 @@ void read_safe_date(time_t *a, char *msg) {
   }
 }
 
-// ------------------------------------------------------------------- //
-
 void read_option(int *a) {
   read_safe_int(a, "\nInsira uma opção: ");
   if(*a > 9) {
@@ -72,7 +81,7 @@ void read_option(int *a) {
 
 void read_id(int *a) {
   read_safe_int(a, "\nInsira o ID da tarefa: ");
-  if(0/*ID DOESNT EXIT*/) {
+  if(*a >= ID_COUNT) {
     wrong_input();
     read_id(a);
   }
