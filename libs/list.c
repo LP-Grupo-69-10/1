@@ -46,7 +46,7 @@ void search_priority(list l, int key, list *prev, list *cur) {
 
 void insert_priority(list l, task *t) {
   list to_add = (list)malloc(sizeof(node));
-  list prev,_;
+  list prev, _;
 
   if(to_add != NULL) {
     to_add->data = t;
@@ -132,26 +132,8 @@ list creation_list(list l) {
 }
 
 task *find_task(list l, int key) {
-  while((l = l->next) != NULL) {
-    if(l->data->id == key) {
-      return l->data;
-    }
-  }
-
-  return NULL;
-}
-
-void print_list(list l, int b) {
-  while((l = l->next) != NULL) {
-
-    if( b &  1)                              printf("id: %hu\n", l->data->id);
-    if( b &  2)                              printf("prioridade: %hhd\n", l->data->priority);
-    if( b &  4)                              printf("criado em %s", ctime(&l->data->creation));
-    if( b &  8)                              printf("descricao: %s\n", l->data->description);
-    if( b & 16)                              printf("responsavel: %s\n", l->data->person);
-    if((b & 32) && l->data->deadline != 0)   printf("prazo a %s", ctime(&l->data->deadline));
-    if((b & 64) && l->data->conclusion != 0) printf("concluido a %s", ctime(&l->data->conclusion));
-
-    puts("");
-  }
+  list _, cur;
+  search_id(l, key, &_, &cur);
+  
+  return (cur == NULL ? NULL : cur->data);
 }

@@ -53,22 +53,33 @@ void read_safe_string(char *a, char *msg) {
 
 void read_safe_date(time_t *a, char *msg) {
   printf("%s", msg);
-  struct tm *date = (struct tm*)malloc(sizeof(struct tm));
+  int year, month, day, hour, min;
   
-  read_safe_int(&date->tm_year, "Insira o ano: ");
-  read_safe_int(&date->tm_mon,  "Insira o mês: ");
-  read_safe_int(&date->tm_mday, "Insira o dia: ");
-  read_safe_int(&date->tm_hour, "Insira a hora: ");
-  read_safe_int(&date->tm_min , "Insira o minuto: ");
-  date->tm_year -= 1900; date->tm_mon--;
+  read_safe_int(&year,  "\nInsira o ano: ");
+  read_safe_int(&month, "\nInsira o mês: ");
+  read_safe_int(&day,   "\nInsira o dia: ");
+  read_safe_int(&hour,  "\nInsira a hora: ");
+  read_safe_int(&min,   "\nInsira o minuto: ");
+  year -= 1900; month--;
+
+  struct tm input = {
+    .tm_year = year,
+    .tm_mon = month,
+    .tm_mday = day,
+    .tm_hour = hour,
+    .tm_min = min
+  };
   
-  *a = mktime(date);
-  free(date);
- 
-  if(*a == -1) {
+  *a = mktime(&input);
+
+  struct tm *output = localtime(a);
+  
+  if(output->tm_year != year || output->tm_mon != month || output->tm_mday != day || output->tm_hour != hour || output->tm_min != min) {
     wrong_input();
     read_safe_date(a, msg);
   }
+
+  //free(output);
 }
 
 void read_option(int *a) {

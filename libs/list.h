@@ -34,6 +34,4 @@ list creation_list(list);
 
 task *find_task(list, int);
 
-void print_list(list, int);
-
 #endif /* LIST_H */

@@ -35,13 +35,14 @@ void print_menu() {
   printf("+------------------------------------------------------+\n");
   printf("|                                                      |\n");
   printf("| 1 - Inserir nova tarefa                              |\n");
-  printf("| 2 - Mover cartões                                    |\n");
-  printf("| 3 - Alterar a pessoa responsável                     |\n");
-  printf("| 4 - Fechar tarefa                                    |\n");
-  printf("| 5 - Reabrir tarefa                                   |\n");
-  printf("| 6 - Visualizar o quadro                              |\n");
-  printf("| 7 - Visualizar as tarefas de uma pessoa              |\n");
-  printf("| 8 - Visualizar tarefas ordenadas por data de criação |\n");
+  printf("| 2 - Ver tarefa                                       |\n");
+  printf("| 3 - Mover cartões                                    |\n");
+  printf("| 4 - Alterar a pessoa responsável                     |\n");
+  printf("| 5 - Fechar tarefa                                    |\n");
+  printf("| 6 - Reabrir tarefa                                   |\n");
+  printf("| 7 - Visualizar o quadro                              |\n");
+  printf("| 8 - Visualizar as tarefas de uma pessoa              |\n");
+  printf("| 9 - Visualizar tarefas ordenadas por data de criação |\n");
   printf("| 0 - Terminar                                         |\n");
   printf("|                                                      |\n");
   printf("+------------------------------------------------------+\n");
@@ -53,12 +54,24 @@ void insert_new_task() {
   read_priority(&t->priority);  
   read_description(t->description);
   read_person(t->person);
+  read_deadline(&t->deadline);
   
   insert_priority(TO_DO, t);
 }
 
+void see_task() {
+  int id;
+  read_id(&id);
+
+  task *t;
+  if((t = find_task(TO_DO, id)) != NULL) print_task(t);
+  else if((t = find_task(DOING, id)) != NULL) print_task(t);
+  else if((t = find_task(DONE, id)) != NULL) print_task(t);
+  else printf("Tarefa não encontrada.\n");
+}
+
 void start_task() {
-  int id = 1002;
+  int id;
   read_id(&id);
   
   task *to_start = find_task(TO_DO, id);
@@ -69,10 +82,10 @@ void start_task() {
       read_person(to_start->person);
     }
 
-    /*
-    time_t deadline;
-    read_deadline(&deadline);
-    */
+    while(to_start->deadline == 0) {
+      printf("Tem que especificar o prazo.");
+      read_deadline(&to_start->deadline);
+    }
     
     remove_task(TO_DO, id);
     insert_priority(DOING, to_start);
@@ -94,13 +107,15 @@ void change_responsible() {
   int id;
   read_id(&id);
 
-  char *person = malloc(60 * sizeof(char));
-  read_person(person);
-
-  if(find_task(TO_DO, id) != NULL) edit_person(TO_DO, id, person);
-  else if(find_task(DOING, id) != NULL) edit_person(DOING, id, person);
-  else if(find_task(DONE, id) != NULL) edit_person(DONE, id, person);
-  else printf("Tarefa não encontrada.\n");
+  if(find_task(DOING, id) != NULL) {
+    char *person = malloc(60 * sizeof(char));
+    read_person(person);
+    edit_person(DOING, id, person);
+  }
+  
+  else {
+    printf("Tarefa não encontrada.\n");
+  }
 }
 
 void end_task() {
@@ -108,14 +123,15 @@ void end_task() {
   read_id(&id);
 
   task *to_add = find_task(DOING, id);
-  if(to_add == NULL) {
-      printf("Tarefa não encontrada.\n");
-      return;
-    }
+  if(to_add != NULL) {
+    to_add->conclusion = time(NULL);
+    remove_task(DOING, id);
+    insert_priority(DONE, to_add);
+  }
 
-  to_add->conclusion = time(NULL);
-  remove_task(DOING, id);
-  insert_priority(DONE, to_add);
+  else {
+    printf("Tarefa não encontrada.\n");
+  }
 }
 
 void redo_task() {
@@ -123,61 +139,52 @@ void redo_task() {
   read_id(&id);
   
   task *to_add = find_task(DONE, id);
-  remove_task(DONE, id);
+
+  if(to_add != NULL) {
+    remove_task(DONE, id);
+    
+    to_add->creation = time(NULL);
+    to_add->conclusion = 0; 
   
-  to_add->creation = time(NULL);
-  to_add->conclusion = 0; 
-  
-  insert_priority(TO_DO, to_add);
+    insert_priority(TO_DO, to_add);
+  }
+
+  else {
+    printf("Tarefa não encontrada.\n");
+  }
 }
 
-void print_board() {
-  list run1 = TO_DO->next, run2 = DOING->next, run3 = DONE->next;
+void print_by_priority() {
+  print_board(TO_DO, DOING, DONE);
+}
+
+void print_by_person() {
+  char *s = malloc(60 * sizeof(char));
+  read_person(s);
+  print_board(person_list(TO_DO, s), person_list(DOING, s), person_list(DONE, s));
+}
+
+void print_by_creation() {
+  print_board(creation_list(TO_DO), creation_list(DOING), creation_list(DONE));
+}
+
+void print_board(list to_do, list doing, list done) {
   printf("+-----------------------------------+-----------------------------------+-----------------------------------+\n");
   printf("|               TO DO               |               DOING               |                DONE               |\n");
   printf("+-----------------------------------+-----------------------------------+-----------------------------------+\n");
 
-  if(run1 == NULL && run2 == NULL && run3 == NULL) {
-    printf("|                                   |                                   |                                   |\n");
-    return;
-  }
-  
-  while(run1 != NULL || run2 != NULL || run3 != NULL) {
-    char *s1 = string_task((run1 != NULL ? run1->data : NULL));
-    char *s2 = string_task((run2 != NULL ? run2->data : NULL));
-    char *s3 = string_task((run3 != NULL ? run3->data : NULL));
+  do {
+    if(to_do != NULL) to_do = to_do->next;
+    if(doing != NULL) doing = doing->next;
+    if(done  != NULL) done  = done->next;
+    
+    char *s1 = string_task((to_do != NULL ? to_do->data : NULL));
+    char *s2 = string_task((doing != NULL ? doing->data : NULL));
+    char *s3 = string_task((done  != NULL ? done->data  : NULL));
     
     printf("| %.33s | %.33s | %.33s |\n", s1, s2, s3);
-    
-    if(run1 != NULL) run1 = run1->next;
-    if(run2 != NULL) run2 = run2->next;
-    if(run3 != NULL) run3 = run3->next;
-  }
+  }  while(to_do != NULL || doing != NULL || done != NULL);
 
   printf("+-----------------------------------+-----------------------------------+-----------------------------------+\n");
   printf("- (#n): ID da tarefa\n");
-}
-
-void print_by_person() {
-  list l;    
-  char *s = malloc(60 * sizeof(char));
-  read_person(s);
-  
-  l = person_list(TO_DO, s);
-  print_list(l, 127);
-  l = person_list(DOING, s);
-  print_list(l, 127);
-  l = person_list(DONE, s);
-  print_list(l, 127);
-}
-
-void print_by_creation() {
-  list l;
-  
-  l = creation_list(TO_DO);
-  print_list(l, 127);
-  l = creation_list(DOING);
-  print_list(l, 127);
-  l = creation_list(DONE);
-  print_list(l, 127);
 }

@@ -22,7 +22,7 @@ typedef struct {
 } task;
 
 task *new_task();
-
 char *string_task(task*);
+void print_task(task*);
 
 #endif /* TASK_H */
