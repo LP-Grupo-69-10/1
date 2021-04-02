@@ -51,15 +51,17 @@ void print_menu() {
 void insert_new_task() {
   task *t = new_task();
   
-  read_priority(&t->priority);  
+  read_priority(&t->priority);
   read_description(t->description);
-  read_person(t->person);
-  read_deadline(&t->deadline);
+  read_person(t->person, 0);
+  read_deadline(&t->deadline, 0);
   
   insert_priority(TO_DO, t);
 }
 
 void see_task() {
+  print_by_priority();
+  
   int id;
   read_id(&id);
 
@@ -71,21 +73,15 @@ void see_task() {
 }
 
 void start_task() {
+  print_by_priority();
+  
   int id;
   read_id(&id);
   
   task *to_start = find_task(TO_DO, id);
   if(to_start != NULL) {
-  
-    while(to_start->person[0] == '\0') {
-      printf("Tem que especificar o responsável.");
-      read_person(to_start->person);
-    }
-
-    while(to_start->deadline == 0) {
-      printf("Tem que especificar o prazo.");
-      read_deadline(&to_start->deadline);
-    }
+    read_person(to_start->person, 1);
+    read_deadline(&to_start->deadline, 1);
     
     remove_task(TO_DO, id);
     insert_priority(DOING, to_start);
@@ -104,12 +100,14 @@ void start_task() {
 }
 
 void change_responsible() {
+  print_by_priority();
+  
   int id;
   read_id(&id);
 
   if(find_task(DOING, id) != NULL) {
     char *person = malloc(60 * sizeof(char));
-    read_person(person);
+    read_person(person, 1);
     edit_person(DOING, id, person);
   }
   
@@ -119,6 +117,8 @@ void change_responsible() {
 }
 
 void end_task() {
+  print_by_priority();
+  
   int id;
   read_id(&id);
 
@@ -135,6 +135,8 @@ void end_task() {
 }
 
 void redo_task() {
+  print_by_priority();
+  
   int id;
   read_id(&id);
   
@@ -160,7 +162,7 @@ void print_by_priority() {
 
 void print_by_person() {
   char *s = malloc(60 * sizeof(char));
-  read_person(s);
+  read_person(s, 1);
   print_board(person_list(TO_DO, s), person_list(DOING, s), person_list(DONE, s));
 }
 
