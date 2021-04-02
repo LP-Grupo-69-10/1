@@ -27,6 +27,8 @@ int main() {
   while(!exit_status) {
     print_menu();
     read_option(&option);
+
+    clean_screen();
     
     switch(option) {
     case 1: insert_new_task(); break;
@@ -44,6 +46,6 @@ int main() {
     if(option <= 4)
       write_lists();
   }
-
+  
   return EXIT_SUCCESS;
 }
