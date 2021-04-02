@@ -56,7 +56,10 @@ void read_safe_date(time_t *a, char *msg) {
   char* input = malloc(60*sizeof(char));
   read_safe_string(input, msg);
   
-  if(input[0] == '\0') return;
+  if(input[0] == '\0') {
+    *a = 0;
+    return;
+  }
   
   if(strlen(input) != 16 || input[4] != '-' || input[7] != '-' || input[10] != '-' || input[13] != ':') {
     wrong_input();
@@ -86,9 +89,8 @@ void read_safe_date(time_t *a, char *msg) {
   strncpy(min_,   input+14, 2);
 
   int year = atoi(year_)-1900, month = atoi(month_)-1, day = atoi(day_), hour = atoi(hour_), min = atoi(min_);
-  struct tm t = {.tm_year = year, .tm_mon = month, .tm_mday = day, .tm_hour = hour, .tm_min = min};
+  struct tm t = {.tm_year = year, .tm_mon = month, .tm_mday = day, .tm_hour = hour, .tm_min = min, .tm_isdst = -1};
   
-  t.tm_isdst = -1;
   *a = mktime(&t);
   
   struct tm *out = localtime(a);
@@ -98,14 +100,13 @@ void read_safe_date(time_t *a, char *msg) {
   if(out->tm_year != year || out->tm_mon != month || out->tm_mday != day || out->tm_hour != hour || out->tm_min != min) {
     wrong_input();
     read_safe_date(a, msg);
-    *a = 0;
     return;
   }
 
   if(difftime(*a, rawtime) <= 0) {
     printf("Data já não mais disponível.");
-    read_safe_date(a, msg);
     *a = 0;
+    read_safe_date(a, msg);
   }
 }
 
@@ -164,8 +165,7 @@ void read_deadline(time_t *a, int flag) {
 }
 
 void clean_screen() {
-  for(int i = 0; i < 40; i++)
-    printf("\n");
+  printf("\e[1;1H\e[2J");
 }
 
 void wrong_input() {

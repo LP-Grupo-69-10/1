@@ -57,19 +57,19 @@ void print_task(task *t) {
   line = ctime(&t -> creation);
   line[strlen(line)-1] = '\0';
   strcat(line, SPACES);
-  printf("| Criação     | %.42s |\n%s\n", line, s);
+  printf("| Criacao     | %.42s |\n%s\n", line, s);
 
   // Descrição
   sprintf(line, "%s%s", t->description, SPACES);
-  printf("| Descrição   | %.42s |\n%s\n", line, s);
+  printf("| Descricao   | %.42s |\n%s\n", line, s);
 
   // Responsável
-  sprintf(line, "%s%s", (t->person[0] == '\0' ? "Não definido" : t->person),SPACES);
-  printf("| Responsável | %.42s |\n%s\n", line, s);
+  sprintf(line, "%s%s", (t->person[0] == '\0' ? "Nao definido" : t->person), SPACES);
+  printf("| Responsavel | %.42s |\n%s\n", line, s);
   
   // Prazo
   if(t->deadline == 0) {
-    sprintf(line, "Não definido%s", SPACES);
+    sprintf(line, "Nao definido%s", SPACES);
   }
   else {
     line = ctime(&t->deadline);
