@@ -23,7 +23,7 @@ void read_creation(char*);
 void read_deadline(time_t*, int);
 
 void wrong_input();
-void clean_screen();
+void clear_screen();
 int old_date(struct tm*);
 
 #endif /* SAFE_H */

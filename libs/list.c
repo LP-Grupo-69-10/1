@@ -30,6 +30,13 @@ void add_first(list l, task *t) {
   }
 }
 
+int length(list l) {
+  int i;
+  for(i = 0; (l = l->next) != NULL; i++);
+
+  return i;
+}
+
 void search_priority(list l, int key, list *prev, list *cur) {
   *prev = l;
   *cur = l->next;

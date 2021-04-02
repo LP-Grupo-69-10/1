@@ -13,6 +13,8 @@
 #include "menu.h"
 #include "safe.h"
 
+int MAX_DOING = 5;
+
 list TO_DO;
 list DOING;
 list DONE;
@@ -80,13 +82,21 @@ void start_task() {
   
   task *to_start = find_task(TO_DO, id);
   if(to_start != NULL) {
-    read_person(to_start->person, 1);
-    read_deadline(&to_start->deadline, 1);
+    if(length(DOING) == MAX_DOING) {
+      printf("Demasiadas tarefas abertas\n");
+      return;
+    }
+
+    if(to_start->person[0] == '\0') {
+      read_person(to_start->person, 1);
+    }
+    if(to_start->deadline == 0) {
+      read_deadline(&to_start->deadline, 1);
+    }
     
     remove_task(TO_DO, id);
     insert_priority(DOING, to_start);
-  }
-  
+  }  
   else {
     to_start = find_task(DOING, id);
     if(to_start == NULL) {
@@ -172,7 +182,7 @@ void print_by_creation() {
 
 void print_board(list to_do, list doing, list done) {
   printf("+-----------------------------------+-----------------------------------+-----------------------------------+\n");
-  printf("|               TO DO               |               DOING               |                DONE               |\n");
+  printf("|               TO DO               |               DOING %3d           |                DONE               |\n", MAX_DOING);
   printf("+-----------------------------------+-----------------------------------+-----------------------------------+\n");
 
   do {

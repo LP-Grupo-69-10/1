@@ -164,7 +164,7 @@ void read_deadline(time_t *a, int flag) {
   }
 }
 
-void clean_screen() {
+void clear_screen() {
   printf("\e[1;1H\e[2J");
 }
 

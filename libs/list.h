@@ -18,6 +18,7 @@ typedef struct node_ {
 
 list new_list();
 void add_first(list, task*);
+int length(list);
 
 void search_priority(list, int, list*, list*);
 void insert_priority(list, task*);
