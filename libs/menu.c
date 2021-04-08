@@ -20,15 +20,15 @@ list DOING;
 list DONE;
 
 void load_lists() {
-  TO_DO = read_fl(".files/to_do");
-  DOING = read_fl(".files/doing");
-  DONE  = read_fl(".files/done");
+  TO_DO = read_fl("files/to_do");
+  DOING = read_fl("files/doing");
+  DONE  = read_fl("files/done");
 }
 
 void write_lists() {
-  write_lf(TO_DO, ".files/to_do");
-  write_lf(DOING, ".files/doing");
-  write_lf(DONE,  ".files/done");
+  write_lf(TO_DO, "files/to_do");
+  write_lf(DOING, "files/doing");
+  write_lf(DONE,  "files/done");
 }
 
 void print_menu() {

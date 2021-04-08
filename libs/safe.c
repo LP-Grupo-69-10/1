@@ -11,7 +11,7 @@
 #include "safe.h"
 #include "task.h"
 
-void read_safe_num(int *a, char* msg) {
+void read_safe_int(int *a, char* msg) {
   printf("%s", msg);
   
   char *buf = malloc(100 * sizeof(char));
@@ -25,17 +25,11 @@ void read_safe_num(int *a, char* msg) {
   
   if(*a < 0 || strcmp(t_buf, buf) != 0) { 
     wrong_input();
-    read_safe_num(a, msg);
+    read_safe_int(a, msg);
   }
   
   free(buf);
   free(t_buf);
-}
-
-void read_safe_int(int* a, char* msg) {
-  int t;
-  read_safe_num(&t, msg); 
-  *a = t;
 }
 
 void read_safe_string(char *a, char *msg) {

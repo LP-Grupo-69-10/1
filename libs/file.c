@@ -10,14 +10,16 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define STORED_SIZE (sizeof(task) - sizeof(int))
+// tamanho da estrutura excluindo id
+int STORED_SIZE = sizeof(task) - sizeof(int);
 
 void write_lf(list l, char *filename) {  
   FILE *fp = fopen(filename,"wb");
   
   if(fp != NULL) { 
     while((l = l->next) != NULL) {
-      fwrite(&l->data->priority, STORED_SIZE, 1, fp);    
+      // referenciar a estrutua saltando o id [ id | -> priority | ... ]
+      fwrite(&l->data->priority, STORED_SIZE, 1, fp); 
     }
   }
     
