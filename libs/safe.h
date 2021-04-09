@@ -18,8 +18,11 @@ void read_option(int*);
 void read_priority(int*);
 void read_description(char*);
 void read_person(char*, int);
+void read_answer(char*);
+void read_filename(char*);
 void read_creation(char*);
 void read_deadline(time_t*, int);
+void read_save(char*);
 
 void wrong_input();
 void clear_screen();

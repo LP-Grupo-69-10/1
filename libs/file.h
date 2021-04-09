@@ -11,5 +11,6 @@
 
 void write_lf(list, char*);
 list read_fl(char*);
+void write_out(char*, char*);
 
 #endif /* FILE_H */

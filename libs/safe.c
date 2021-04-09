@@ -10,6 +10,7 @@
 #include <ctype.h>
 #include "safe.h"
 #include "task.h"
+#include "file.h"
 
 void read_safe_int(int *a, char* msg) {
   printf("%s", msg);
@@ -34,7 +35,7 @@ void read_safe_int(int *a, char* msg) {
 
 void read_safe_string(char *a, char *msg) {
   if(a == NULL) {
-    printf("Sem memória disponível. Devias começar a trabalhar!\n");
+    printf("Sem memoria disponivel. Devias comecar a trabalhar!\n");
   }
   else {
     printf("%s", msg);
@@ -98,14 +99,14 @@ void read_safe_date(time_t *a, char *msg) {
   }
 
   if(difftime(*a, rawtime) <= 0) {
-    printf("Data já não mais disponível.");
+    printf("Data ja nao mais disponivel.");
     *a = 0;
     read_safe_date(a, msg);
   }
 }
 
 void read_option(int *a) {
-  read_safe_int(a, "\nInsira uma opção: ");
+  read_safe_int(a, "\nInsira uma opcao: ");
   if(*a > 9) {
     wrong_input();
     read_option(a);
@@ -125,7 +126,7 @@ void read_priority(int *a) {
 }
 
 void read_description(char *a) {
-  read_safe_string(a, "\nInsira a descrição desta tarefa: ");
+  read_safe_string(a, "\nInsira a descricao desta tarefa: ");
   if(a[0] == '\0') {
     wrong_input();
     read_description(a);
@@ -134,10 +135,10 @@ void read_description(char *a) {
 
 void read_person(char *a, int flag) {
   if(!flag) {
-    read_safe_string(a, "\nInsira o nome do responsável por esta tarefa, ENTER caso não ainda nao esteja definido: ");
+    read_safe_string(a, "\nInsira o nome do responsavel por esta tarefa, ENTER caso ainda nao esteja definido: ");
   }
   else {
-    read_safe_string(a, "\nInsira o nome do responsável por esta tarefa: ");
+    read_safe_string(a, "\nInsira o nome do responsavel por esta tarefa: ");
     if(a[0] == '\0') {
       wrong_input();
       read_person(a, 1);
@@ -145,9 +146,25 @@ void read_person(char *a, int flag) {
   }
 }
 
+void read_answer(char *a) {
+  read_safe_string(a, "\nPretende guardar o resultado em um ficheiro? (Sim/Nao): ");
+  if(strcmp(a, "Sim") != 0 && strcmp(a, "Nao") != 0) {
+    wrong_input();
+    read_answer(a);
+  }
+}
+
+void read_filename(char *a) {
+  read_safe_string(a, "\nInsira o nome do ficheiro onde vai ser guardado: ");
+  if(a[0] == '\0') {
+    wrong_input();
+    read_filename(a);
+  }
+}
+
 void read_deadline(time_t *a, int flag) {
   if(!flag) {
-    read_safe_date(a, "\nInsira o prazo para a tarefa com o formato AAAA-MM-DD-HH:MM, ENTER caso não ainda nao esteja definido: ");
+    read_safe_date(a, "\nInsira o prazo para a tarefa com o formato AAAA-MM-DD-HH:MM, ENTER caso ainda nao esteja definido: ");
   }
   else {
     read_safe_date(a, "\nInsira o prazo para a tarefa com o formato AAAA-MM-DD-HH:MM: ");
@@ -155,6 +172,16 @@ void read_deadline(time_t *a, int flag) {
       wrong_input();
       read_deadline(a, 1);
     }
+  }
+}
+
+void read_save(char *a) {
+  char *input = malloc(20 * sizeof(char));
+  read_answer(input);
+  
+  if(strcmp(input, "Sim") == 0) {
+    read_filename(input);
+    write_out(input, a);
   }
 }
 

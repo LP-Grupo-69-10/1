@@ -10,6 +10,8 @@
 #include <string.h>
 #include "list.h"
 #include "task.h"
+#include "safe.h"
+#include "file.h"
 
 #define SPACES "                                                                 "
 
@@ -47,25 +49,25 @@ char *string_task(task *t) {
 void print_task(task *t) {
   char *s = "+-------------+--------------------------------------------+";
   char *line = malloc(100*sizeof(char));
-
+  char *to_write = malloc(2000*sizeof(char));
 
   // Prioridade
   sprintf(line, "%d%s", t->priority, SPACES);
-  printf("%s\n| Prioridade  | %.42s |\n%s\n", s, line, s);
+  sprintf(to_write, "%s\n| Prioridade  | %.42s |\n%s\n", s, line, s);
 
-  // Data de criação
+  // Data de criacao
   line = ctime(&t -> creation);
   line[strlen(line)-1] = '\0';
   strcat(line, SPACES);
-  printf("| Criacao     | %.42s |\n%s\n", line, s);
+  sprintf(to_write+strlen(to_write), "| Criacao     | %.42s |\n%s\n", line, s);
 
-  // Descrição
+  // Descricao
   sprintf(line, "%s%s", t->description, SPACES);
-  printf("| Descricao   | %.42s |\n%s\n", line, s);
+  sprintf(to_write+strlen(to_write), "| Descricao   | %.42s |\n%s\n", line, s);
 
-  // Responsável
+  // Responsavel
   sprintf(line, "%s%s", (t->person[0] == '\0' ? "Nao definido" : t->person), SPACES);
-  printf("| Responsavel | %.42s |\n%s\n", line, s);
+  sprintf(to_write+strlen(to_write), "| Responsavel | %.42s |\n%s\n", line, s);
   
   // Prazo
   if(t->deadline == 0) {
@@ -77,9 +79,9 @@ void print_task(task *t) {
     strcat(line, SPACES);
   }
   
-  printf("| Prazo       | %.42s |\n%s\n", line, s);
+  sprintf(to_write+strlen(to_write), "| Prazo       | %.42s |\n%s\n", line, s);
 
-  // Conlusão
+  // Conlusao
   if(t->conclusion == 0) {
     sprintf(line, "Nao terminada%s", SPACES);
   }
@@ -89,5 +91,10 @@ void print_task(task *t) {
     strcat(line, SPACES);
   }
   
-  printf("| Conclusao   | %.42s |\n%s\n", line, s);
+  sprintf(to_write+strlen(to_write), "| Conclusao   | %.42s |\n%s\n", line, s);
+
+  printf("%s", to_write);
+  read_save(to_write);
+
+  free(to_write);
 }

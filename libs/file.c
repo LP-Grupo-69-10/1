@@ -40,9 +40,20 @@ list read_fl(char *filename) {
     fread(&t->priority, STORED_SIZE, 1, fp);
     fseek(fp, -STORED_SIZE, SEEK_CUR);
     
-    add_first(l, t);
+     add_first(l, t);
   }
   
   fclose(fp);  
   return l;
+}
+
+
+void write_out(char *filename_, char *to_write) {
+  char *filename = malloc(50*sizeof(char));
+  sprintf(filename, "files/%s", filename_);
+  FILE *fp = fopen(filename, "w");
+  fprintf(fp, "%s", to_write);
+  
+  fclose(fp);
+  free(filename);
 }
