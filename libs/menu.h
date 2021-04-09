@@ -24,6 +24,6 @@ void print_by_priority();
 void print_by_person();
 void print_by_creation();
 
-char* print_board(list, list, list);
+char* string_board(list, list, list);
 
 #endif /* MENU_H */

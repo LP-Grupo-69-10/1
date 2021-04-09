@@ -62,7 +62,7 @@ void insert_new_task() {
 }
 
 void see_task() {
-  printf("%s", print_board(TO_DO, DOING, DONE));
+  printf("%s", string_board(TO_DO, DOING, DONE));
   
   int id;
   read_id(&id);
@@ -75,7 +75,7 @@ void see_task() {
 }
 
 void start_task() {
-  printf("%s", print_board(TO_DO, DOING, DONE));
+  printf("%s", string_board(TO_DO, DOING, DONE));
   
   int id;
   read_id(&id);
@@ -110,7 +110,7 @@ void start_task() {
 }
 
 void change_responsible() {
-  printf("%s", print_board(TO_DO, DOING, DONE));
+  printf("%s", string_board(TO_DO, DOING, DONE));
   
   int id;
   read_id(&id);
@@ -127,7 +127,7 @@ void change_responsible() {
 }
 
 void end_task() {
-  printf("%s", print_board(TO_DO, DOING, DONE));
+  printf("%s", string_board(TO_DO, DOING, DONE));
   
   int id;
   read_id(&id);
@@ -145,7 +145,7 @@ void end_task() {
 }
 
 void redo_task() {
-  printf("%s", print_board(TO_DO, DOING, DONE));
+  printf("%s", string_board(TO_DO, DOING, DONE));
   
   int id;
   read_id(&id);
@@ -167,7 +167,7 @@ void redo_task() {
 }
 
 void print_by_priority(int save) {
-  char *board = print_board(TO_DO, DOING, DONE);
+  char *board = string_board(TO_DO, DOING, DONE);
   printf("%s", board);
   read_save(board);
 }
@@ -175,18 +175,18 @@ void print_by_priority(int save) {
 void print_by_person() {
   char *s = malloc(60 * sizeof(char));
   read_person(s, 1);
-  char *board = print_board(person_list(TO_DO, s), person_list(DOING, s), person_list(DONE, s));
+  char *board = string_board(person_list(TO_DO, s), person_list(DOING, s), person_list(DONE, s));
   printf("%s", board);
   read_save(board);
 }
 
 void print_by_creation() {
-  char *board = print_board(creation_list(TO_DO), creation_list(DOING), creation_list(DONE));
+  char *board = string_board(creation_list(TO_DO), creation_list(DOING), creation_list(DONE));
   printf("%s", board);
   read_save(board);
 }
 
-char* print_board(list to_do, list doing, list done) {
+char* string_board(list to_do, list doing, list done) {
   char *to_write = malloc(5000 * sizeof(char));
 
   sprintf(to_write,                  "+-----------------------------------+-----------------------------------+-----------------------------------+\n");

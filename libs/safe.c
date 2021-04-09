@@ -71,11 +71,11 @@ void read_safe_date(time_t *a, char *msg) {
     }
   }
 
-  char* year_  = malloc(4*sizeof(char));
-  char* month_ = malloc(4*sizeof(char));
-  char* day_   = malloc(4*sizeof(char));
-  char* hour_  = malloc(4*sizeof(char));
-  char* min_   = malloc(4*sizeof(char));
+  char *year_  = malloc(4*sizeof(char));
+  char *month_ = malloc(4*sizeof(char));
+  char *day_   = malloc(4*sizeof(char));
+  char *hour_  = malloc(4*sizeof(char));
+  char *min_   = malloc(4*sizeof(char));
   
   strncpy(year_,  input,    4);
   strncpy(month_, input+5,  2);
@@ -85,6 +85,7 @@ void read_safe_date(time_t *a, char *msg) {
 
   int year = atoi(year_)-1900, month = atoi(month_)-1, day = atoi(day_), hour = atoi(hour_), min = atoi(min_);
   struct tm t = {.tm_year = year, .tm_mon = month, .tm_mday = day, .tm_hour = hour, .tm_min = min, .tm_isdst = -1};
+  free(input);
   
   *a = mktime(&t);
   
@@ -183,6 +184,8 @@ void read_save(char *a) {
     read_filename(input);
     write_out(input, a);
   }
+
+  free(input);
 }
 
 void clear_screen() {
